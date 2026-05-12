@@ -4,6 +4,7 @@ import { computed } from 'vue'
 /**
  * Section header: pill badge + headline + description (stacked, centered).
  * `theme="dark"` matches black hero reference; `theme="light"` for cards / light UI.
+ * `variant-2` always uses white badge/title/description text (for use on dark or brand backgrounds).
  */
 defineOptions({ inheritAttrs: false })
 
@@ -13,8 +14,8 @@ const props = withDefaults(
     badge?: string
     title?: string
     description?: string
-    /** dark: black bg, light text. light: for use on white/light surfaces */
-    theme?: 'light' | 'dark'
+    /** dark: black bg, light text. on-blue: light text on blue/brand sections (no solid bar). light: cards */
+    theme?: 'light' | 'dark' | 'on-blue'
     /** Extra classes on root (padding, margins) */
     contentClass?: string
   }>(),
@@ -27,30 +28,42 @@ const props = withDefaults(
   },
 )
 
-const rootClass = computed(() =>
-  props.theme === 'dark'
-    ? 'bg-black text-center px-4 py-12 sm:py-14'
-    : 'text-center px-2 py-6 sm:py-8',
-)
+const rootClass = computed(() => {
+  if (props.theme === 'dark') return 'bg-black text-center px-4 py-12 sm:py-14 text-white'
+  if (props.theme === 'on-blue') return 'relative text-left px-0 py-0 text-white'
+  return 'text-center px-2 py-6 sm:py-8'
+})
 
-const badgeClass = computed(() =>
-  props.theme === 'dark'
-    ? 'inline-flex rounded-full bg-white/10 px-4 py-1.5 text-xs font-medium text-zinc-300'
-    : 'inline-flex rounded-full bg-blue-100 px-4 py-1.5 text-xs font-medium text-blue-600',
-)
+const badgeClass = computed(() => {
+  if (props.variant === 'variant-2')
+    return 'inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-white'
+  if (props.theme === 'dark')
+    return 'inline-flex rounded-full bg-white/10 px-4 py-1.5 text-xs font-medium text-white/90'
+  if (props.theme === 'on-blue')
+    return 'inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-white'
+  return 'inline-flex rounded-full bg-blue-100 px-4 py-1.5 text-xs font-medium text-blue-600'
+})
 
 const titleClass = computed(() => {
   const top = props.badge ? 'mt-5' : 'mt-0'
-  return props.theme === 'dark'
-    ? `${top} font-display text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-[2.75rem]`
-    : `${top} font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl md:text-[2.25rem]`
+  if (props.variant === 'variant-2')
+    return `${top} font-display text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-[2.25rem]`
+  if (props.theme === 'dark')
+    return `${top} font-display text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-[2.75rem]`
+  if (props.theme === 'on-blue')
+    return `${top} font-display text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-[2.25rem]`
+  return `${top} font-display text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl md:text-[2.25rem]`
 })
 
-const descriptionClass = computed(() =>
-  props.theme === 'dark'
-    ? 'mt-4 max-w-2xl mx-auto text-base leading-relaxed text-zinc-400 sm:text-lg'
-    : 'mt-3 max-w-2xl mx-auto text-sm leading-relaxed text-slate-600 sm:text-base',
-)
+const descriptionClass = computed(() => {
+  if (props.variant === 'variant-2')
+    return 'mt-3 max-w-2xl text-sm leading-relaxed text-white/90 sm:text-base'
+  if (props.theme === 'dark')
+    return 'mt-4 max-w-2xl mx-auto text-base leading-relaxed text-white/80 sm:text-lg'
+  if (props.theme === 'on-blue')
+    return 'mt-3 max-w-2xl text-sm leading-relaxed text-white/90 sm:text-base'
+  return 'mt-3 max-w-2xl mx-auto text-sm leading-relaxed text-slate-600 sm:text-base'
+})
 </script>
 
 <template>
@@ -68,14 +81,14 @@ const descriptionClass = computed(() =>
       </h2>
       <p v-if="description" data-slot="card-description" :class="descriptionClass" v-html="description"></p>
     </div>
-    <!-- <div v-if="variant === 'variant-2'">
-      <span v-if="badge" data-slot="card-badge" :class="badgeClass">
-        {{ badge }}
+    <div v-else-if="variant === 'variant-2'" class="text-left text-white">
+      <span v-if="badge" data-slot="card-badge" :class="badgeClass" v-html="badge">
       </span>
-      <h2 v-if="title" data-slot="card-title" :class="titleClass">
-        {{ title }}
+      <h2 v-if="title" data-slot="card-title" :class="titleClass" v-html="title">
       </h2>
-    </div> -->
+      <p v-if="description" data-slot="card-description" :class="descriptionClass" v-html="description">
+      </p>
+    </div>
     <div v-else>
       <span v-if="badge" data-slot="card-badge" :class="badgeClass" v-html="badge">
       </span>

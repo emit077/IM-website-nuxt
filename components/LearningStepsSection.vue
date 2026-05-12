@@ -118,22 +118,92 @@ const formErrors = ref<{ name?: string; mobile?: string }>({})
 const formSubmitting = ref(false)
 const formSuccess = ref(false)
 
+const NAME_RE = /^[A-Za-z][A-Za-z .'-]{1,49}$/
+const MOBILE_RE = /^[6-9]\d{9}$/
+
+function validateName(value: string | null | undefined): string | undefined {
+    const v = (value ?? '').trim()
+    if (v.length === 0) return 'Name is required.'
+    if (v.length < 2) return 'Name must be at least 2 characters.'
+    if (!NAME_RE.test(v)) return 'Use letters, spaces and . \' - only.'
+    return undefined
+}
+
+function validateMobile(value: string | null | undefined): string | undefined {
+    const v = (value ?? '').trim()
+    if (v.length === 0) return 'Mobile number is required.'
+    if (!/^\d+$/.test(v)) return 'Mobile number must contain digits only.'
+    if (v.length !== 10) return 'Mobile number must be exactly 10 digits.'
+    if (!MOBILE_RE.test(v)) return 'Enter a valid Indian mobile (starts with 6–9).'
+    return undefined
+}
+
 function validateForm(): boolean {
     const errs: { name?: string; mobile?: string } = {}
-    const name = form.value.name.trim()
-    const mobile = form.value.mobile.trim()
-
-    if (name.length < 2) errs.name = 'Please enter your full name.'
-    if (!/^[6-9]\d{9}$/.test(mobile))
-        errs.mobile = 'Enter a valid 10-digit Indian mobile number.'
-
+    const nameErr = validateName(form.value.name)
+    const mobileErr = validateMobile(form.value.mobile)
+    if (nameErr) errs.name = nameErr
+    if (mobileErr) errs.mobile = mobileErr
     formErrors.value = errs
     return Object.keys(errs).length === 0
 }
 
+/** Re-validate a single field (clears the error as the user types valid input). */
+function onNameInput() {
+    if (formErrors.value.name) {
+        formErrors.value = { ...formErrors.value, name: validateName(form.value.name) }
+    }
+}
+
+/** Block any non-digit keystroke before it reaches the mobile field. */
+function onMobileKeydown(e: KeyboardEvent) {
+    const allowed = [
+        'Backspace',
+        'Delete',
+        'Tab',
+        'Escape',
+        'Enter',
+        'Home',
+        'End',
+        'ArrowLeft',
+        'ArrowRight',
+        'ArrowUp',
+        'ArrowDown',
+    ]
+    if (allowed.includes(e.key)) return
+    if ((e.ctrlKey || e.metaKey) && ['a', 'c', 'v', 'x', 'z', 'y'].includes(e.key.toLowerCase()))
+        return
+    if (!/^\d$/.test(e.key)) {
+        e.preventDefault()
+    }
+}
+
+/** Strip any non-digits that slipped through (paste, autofill, IME, etc.) */
 function onMobileInput(e: Event) {
     const target = e.target as HTMLInputElement
-    form.value.mobile = target.value.replace(/\D/g, '').slice(0, 10)
+    const cleaned = target.value.replace(/\D/g, '').slice(0, 10)
+    if (target.value !== cleaned) target.value = cleaned
+    form.value.mobile = cleaned
+    if (formErrors.value.mobile) {
+        formErrors.value = { ...formErrors.value, mobile: validateMobile(cleaned) }
+    }
+}
+
+function onMobilePaste(e: ClipboardEvent) {
+    const txt = e.clipboardData?.getData('text') ?? ''
+    if (/\D/.test(txt)) {
+        e.preventDefault()
+        const cleaned = (form.value.mobile + txt.replace(/\D/g, '')).slice(0, 10)
+        form.value.mobile = cleaned
+        if (formErrors.value.mobile) {
+            formErrors.value = { ...formErrors.value, mobile: validateMobile(cleaned) }
+        }
+    }
+}
+
+function onMobileDrop(e: DragEvent) {
+    const txt = e.dataTransfer?.getData('text') ?? ''
+    if (/\D/.test(txt)) e.preventDefault()
 }
 
 async function onSubmitSignIn() {
@@ -147,6 +217,7 @@ async function onSubmitSignIn() {
     formSubmitting.value = false
     formSuccess.value = true
     form.value = { name: '', mobile: '' }
+    formErrors.value = {}
 
     setTimeout(() => {
         formSuccess.value = false
@@ -388,7 +459,10 @@ onUnmounted(() => {
                                         <path d="M4.5 19.5c1.2-3.6 4.2-5 7.5-5s6.3 1.4 7.5 5" stroke="currentColor"
                                             stroke-width="1.6" stroke-linecap="round" />
                                     </svg>
-                                    <input id="signin-name" v-model.trim="form.name" type="text" autocomplete="name"
+                                    <input id="signin-name" v-model.trim="form.name" @input="onNameInput"
+                                        @blur="onNameInput" type="text" autocomplete="name" required
+                                        minlength="2" maxlength="50"
+                                        pattern="^[A-Za-z][A-Za-z .'\-]{1,49}$"
                                         placeholder="Your full name"
                                         class="w-full bg-transparent text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none"
                                         :aria-invalid="!!formErrors.name" aria-describedby="signin-name-error" />
@@ -418,11 +492,14 @@ onUnmounted(() => {
                                         +91
                                     </span>
                                     <span aria-hidden="true" class="h-5 w-px bg-slate-200"></span>
-                                    <input id="signin-mobile" :value="form.mobile" @input="onMobileInput" type="tel"
-                                        inputmode="numeric" autocomplete="tel-national" maxlength="10"
-                                        placeholder="98765 43210"
+                                    <input id="signin-mobile" :value="form.mobile" @input="onMobileInput"
+                                        @keydown="onMobileKeydown" @paste="onMobilePaste"
+                                        @drop="onMobileDrop" type="tel" inputmode="numeric"
+                                        autocomplete="tel-national" required maxlength="10"
+                                        pattern="[6-9][0-9]{9}" placeholder="9876543210"
                                         class="w-full bg-transparent text-[14px] tracking-wide text-slate-900 placeholder:text-slate-400 focus:outline-none"
-                                        :aria-invalid="!!formErrors.mobile" aria-describedby="signin-mobile-error" />
+                                        :aria-invalid="!!formErrors.mobile"
+                                        aria-describedby="signin-mobile-error" />
                                 </div>
                                 <p v-if="formErrors.mobile" id="signin-mobile-error"
                                     class="mt-1.5 text-[12px] font-medium text-rose-600">

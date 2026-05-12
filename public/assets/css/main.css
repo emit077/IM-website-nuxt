@@ -67,10 +67,13 @@
       px-7 py-3.5 rounded-2xl font-semibold text-white
       bg-cta-gradient bg-[length:200%_200%] shadow-cta
       transition-all duration-300 ease-out
-      hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-12px_rgba(29,78,216,0.55)]
+      hover:-translate-y-0.5
       hover:bg-[position:100%_50%]
       focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300/60
       active:translate-y-0;
+  }
+  .btn-primary:hover {
+    box-shadow: 0 18px 40px -12px rgba(29, 78, 216, 0.55);
   }
 
   .btn-secondary {

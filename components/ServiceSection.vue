@@ -87,7 +87,7 @@ const services: ServiceItem[] = [
                 </a>
             </div>
 
-            <div class="mt-6 rounded-2xl bg-gradient-to-br from-blue-950 via-blue-700 to-indigo-900 px-5 py-5 shadow-[0_14px_40px_rgba(29,78,216,0.35)] ring-1 ring-white/10 sm:mt-8 sm:px-6 sm:py-6"
+            <div class="mt-6 rounded-2xl bg-gradient-to-br from-blue-800 via-blue-700 to-indigo-900 p-8 shadow-[0_20px_50px_rgba(37,99,235,0.18)] ring-1 ring-white/10 sm:mt-8 sm:px-6 sm:py-6"
                 v-motion :initial="{ opacity: 0, y: 12 }"
                 :visibleOnce="{ opacity: 1, y: 0, transition: { delay: 520, duration: 450 } }">
                 <div class="flex flex-col gap-4 sm:gap-5 lg:flex-row lg:items-center lg:justify-between">
@@ -99,7 +99,6 @@ const services: ServiceItem[] = [
                             Our counsellors will help you find the perfect mentor.
                         </p>
                     </div>
-
                     <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
                         <a href="#book-demo"
                             class="inline-flex items-center justify-center rounded-lg bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-400">
