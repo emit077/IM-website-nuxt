@@ -57,12 +57,12 @@ const titleClass = computed(() => {
 
 const descriptionClass = computed(() => {
   if (props.variant === 'variant-2')
-    return 'mt-3 max-w-2xl text-sm leading-relaxed text-white/90 sm:text-base'
+    return 'mt-3  text-sm leading-relaxed text-white/90 sm:text-base'
   if (props.theme === 'dark')
-    return 'mt-4 max-w-2xl mx-auto text-base leading-relaxed text-white/80 sm:text-lg'
+    return 'mt-4  mx-auto text-base leading-relaxed text-white/80 sm:text-lg'
   if (props.theme === 'on-blue')
-    return 'mt-3 max-w-2xl text-sm leading-relaxed text-white/90 sm:text-base'
-  return 'mt-3 max-w-2xl mx-auto text-sm leading-relaxed text-slate-600 sm:text-base'
+    return 'mt-3  text-sm leading-relaxed text-white/90 sm:text-base'
+  return 'mt-3  mx-auto text-sm leading-relaxed text-slate-600 sm:text-base'
 })
 </script>
 

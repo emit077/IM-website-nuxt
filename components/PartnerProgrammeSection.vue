@@ -21,7 +21,7 @@ const partners = ['Ryan', 'Delhi Public School', 'VIBGYOR', 'ORCHIDS', 'Narayana
 </script>
 
 <template>
-  <section class="relative mx-auto w-full max-w-[1200px] px-4 py-8 pr-0 sm:py-10" aria-label="Institute hiring section">
+  <section id="partner-programme" class="relative mx-auto w-full max-w-[1200px] px-4 py-8 pr-0 sm:py-10" aria-label="Partner programme">
     <div
       class="relative overflow-hidden rounded-[28px] border border-indigo-300/35 bg-gradient-to-br from-indigo-900 via-indigo-700 to-indigo-500 px-5 pt-6 text-white shadow-[0_24px_55px_-30px_rgba(37,99,235,0.85)] pr-0 sm:pl-7 sm:pt-8 lg:pl-8">
       <div class="grid items-start gap-8 lg:grid-cols-12 lg:gap-10">

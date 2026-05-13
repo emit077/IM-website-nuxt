@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import TrustIndicators from './TrustIndicators.vue'
-import HeroStats from './HeroStats.vue'
+import HeroVisual from './HeroVisual.vue'
 import IconArrowRight from './IconArrowRight.vue'
 import IconBook from './IconBook.vue'
+import IconCalendar from './IconCalendar.vue'
 import IconCheck from './IconCheck.vue'
 
 function rippleHandler(e: MouseEvent) {
@@ -77,6 +78,7 @@ const reviewerAvatars = [
           <div class="flex flex-col sm:flex-row gap-3 sm:gap-4" v-motion :initial="{ opacity: 0, y: 16 }"
             :enter="{ opacity: 1, y: 0, transition: { duration: 600, delay: 500 } }">
             <a href="#book-demo" class="btn-primary ripple group w-full sm:w-auto" @mousemove="rippleHandler">
+              <IconCalendar class="w-4 h-4 shrink-0 opacity-95" />
               Book Free Demo
               <IconArrowRight
                 class="hero-cta-arrow w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -110,8 +112,9 @@ const reviewerAvatars = [
             :initial="{ opacity: 0 }" :enter="{ opacity: 1, transition: { delay: 1000, duration: 600 } }"></div>
         </div>
 
-        <!-- RIGHT: Stats -->
-        <div class="lg:col-span-5 xl:col-span-6 relative flex lg:self-stretch">
+        <!-- RIGHT: Visual + floating trust cards -->
+        <div class="relative flex min-h-0 lg:col-span-5 xl:col-span-6 lg:self-stretch">
+          <HeroVisual class="w-full" />
         </div>
       </div>
       <!-- Trust Indicators -->

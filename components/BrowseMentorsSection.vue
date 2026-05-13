@@ -801,6 +801,10 @@ onUnmounted(() => {
 <template>
     <section id="tutors" class="relative mx-auto w-full max-w-[1200px] px-4 py-12 sm:py-16"
         aria-labelledby="browse-mentors-heading">
+        <!-- Anchor for CTAs site-wide -->
+        <div id="book-demo" class="sr-only scroll-mt-28" tabindex="-1">
+          Book a free demo
+        </div>
         <div aria-hidden="true"
             class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-72 bg-gradient-to-b from-[#eef1ff] via-[#f6f8ff] to-transparent">
         </div>

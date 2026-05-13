@@ -38,12 +38,11 @@ const items = [
     class="rounded-2xl border border-blue-100/80 bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/40 p-3 sm:p-4 shadow-sm"
     aria-label="Trust signals">
     <ul class="flex flex-col lg:flex-row lg:items-stretch" role="list">
-      <li v-for="(item, i) in items" :key="item.id" v-motion :initial="{ opacity: 0, y: 12 }" :enter="{
-        opacity: 1,
+      <li v-for="(item, i) in items" :key="item.id" v-motion :initial="{ y: 10 }" :enter="{
         y: 0,
-        transition: { duration: 500, delay: 680 + i * 90, ease: 'easeOut' },
+        transition: { duration: 480, delay: 200 + i * 70, ease: 'easeOut' },
       }"
-        class="group flex items-start gap-3 px-3 py-2.5 sm:px-4 sm:py-3 transition-all duration-200 hover:bg-white/70 rounded-lg lg:rounded-none">
+        class="group flex min-w-0 flex-1 items-start gap-3 px-3 py-2.5 sm:px-4 sm:py-3 transition-all duration-200 hover:bg-white/70 rounded-lg lg:rounded-none">
         <div class="flex items-start gap-3">
           <span :class="['grid h-10 w-10 shrink-0 place-items-center', item.tone]">
             <Icon :icon="item.icon" class="h-10 w-10" />

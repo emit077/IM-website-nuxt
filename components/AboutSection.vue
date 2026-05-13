@@ -4,6 +4,7 @@ import HeroStats from './HeroStats.vue'
 import IconArrowRight from './IconArrowRight.vue'
 import IconBook from './IconBook.vue'
 import IconCheck from './IconCheck.vue'
+import CardHeader from './ui/cardheader.vue'
 
 function rippleHandler(e: MouseEvent) {
   const target = e.currentTarget as HTMLElement
@@ -14,7 +15,7 @@ function rippleHandler(e: MouseEvent) {
 </script>
 
 <template>
-  <section class="relative overflow-hidden bg-cream-50" aria-labelledby="hero-heading">
+  <section id="about" class="relative overflow-hidden bg-cream-50" aria-label="About us">
     <!-- Animated mesh background -->
     <div aria-hidden="true" class="absolute inset-0 -z-10 bg-mesh-light"></div>
     <div aria-hidden="true" class="absolute inset-0 -z-10 opacity-[0.04]"
@@ -37,28 +38,14 @@ function rippleHandler(e: MouseEvent) {
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start lg:items-stretch">
         <!-- LEFT: Content -->
         <div class="lg:col-span-7 xl:col-span-6 flex flex-col gap-7 lg:gap-8">
-          <!-- Top Badge -->
-          <div>
-            <span class="badge-pill">
-              <span class="grid place-items-center w-5 h-5 rounded-full bg-emerald-500 text-white">
-                <IconCheck class="w-3 h-3" />
-              </span>
-              <span>#1 India's Verified Tutor Platform</span>
-            </span>
-          </div>
-          <!-- Headline -->
-          <h1 id="hero-heading"
-            class="heading-display text-balance text-[2.4rem] sm:text-5xl lg:text-[3.7rem] xl:text-[4rem] leading-[1.06]"
-            v-motion :initial="{ opacity: 0, y: 24 }"
-            :enter="{ opacity: 1, y: 0, transition: { duration: 700, delay: 200, ease: [0.22, 1, 0.36, 1] } }">
-            Find the
-            <span class="text-gradient-brand">Perfect Tutor</span>
-            <br class="hidden sm:block" />
-            for Your Child
-          </h1>
+          <CardHeader variant="variant-1" class="mb-2" badge="ABOUT US" title="About Us" content-class="!px-0 !py-0" />
           <!-- Supporting text -->
-          <p class="text-pretty text-base sm:text-lg text-slate-600 max-w-xl leading-relaxed" v-motion
+          <p class="text-pretty text-base sm:text-lg text-slate-600 leading-relaxed" v-motion
             :initial="{ opacity: 0, y: 16 }" :enter="{ opacity: 1, y: 0, transition: { duration: 700, delay: 350 } }">
+            India's #1 verified tutor platform. Building futures through personalised education with structured tutoring
+            services and reliable teacher recruitment solutions across India.
+            <br />
+            <br />
             Structured tutoring and reliable teacher recruitment — built for families
             and educators across India. Background-checked mentors. Personalised plans.
             Real progress.
@@ -67,16 +54,9 @@ function rippleHandler(e: MouseEvent) {
           <div class="flex flex-col sm:flex-row gap-3 sm:gap-4" v-motion :initial="{ opacity: 0, y: 16 }"
             :enter="{ opacity: 1, y: 0, transition: { duration: 600, delay: 500 } }">
             <a href="#book-demo" class="btn-primary ripple group w-full sm:w-auto" @mousemove="rippleHandler">
-              Book Free Demo
+              Know More
               <IconArrowRight
                 class="hero-cta-arrow w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </a>
-            <a href="#tutors" class="btn-secondary group w-full sm:w-auto">
-              <span
-                class="grid place-items-center w-6 h-6 rounded-full bg-blue-100 text-blue-700 transition-colors duration-200 group-hover:bg-blue-600 group-hover:text-white">
-                <IconBook class="w-3.5 h-3.5" />
-              </span>
-              Browse Tutors
             </a>
           </div>
           <!-- Divider -->
@@ -89,7 +69,7 @@ function rippleHandler(e: MouseEvent) {
         </div>
       </div>
       <!-- Trust Indicators -->
-      <TrustIndicators class="pt-1" />
+      <!-- <TrustIndicators class="pt-1" /> -->
     </div>
     <!-- Bottom soft fade into next section -->
     <div aria-hidden="true"
