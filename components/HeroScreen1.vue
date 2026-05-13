@@ -114,7 +114,7 @@ const reviewerAvatars = [
 
         <!-- RIGHT: Visual + floating trust cards -->
         <div class="relative flex min-h-0 lg:col-span-5 xl:col-span-6 lg:self-stretch">
-          <HeroVisual class="w-full" />
+          <HeroVisual class="w-full" image-src="/img/hero/hero1.png" />
         </div>
       </div>
       <!-- Trust Indicators -->

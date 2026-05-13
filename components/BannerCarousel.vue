@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useIntervalFn, usePreferredReducedMotion } from '@vueuse/core'
+import CardHeader from './ui/cardheader.vue'
 
 export interface BannerSlide {
   /** Public URL, e.g. `/img/banner/banner-1.jpg` */
@@ -17,8 +18,18 @@ const props = withDefaults(
     /** Auto-advance interval in ms */
     interval?: number
     autoplay?: boolean
+    /** Section badge (CardHeader) */
+    badge?: string
+    /** Section title (CardHeader) */
+    title?: string
+    /** Short supporting copy under the title */
+    description?: string
   }>(),
   {
+    badge: 'FEATURED',
+    title: 'Programs, offers & next steps',
+    description:
+      'Seasonal campaigns, partner highlights, and quick links for families — tap a slide to book a demo, explore a program, or jump straight to sign-up.',
     slides: () => [
       {
         image: '/img/banner/banner-1.jpg',
@@ -106,8 +117,10 @@ function onLeave() {
 
 <template>
   <section v-if="count > 0" class="container-page pt-6 pb-2 sm:pt-8 sm:pb-3" aria-roledescription="carousel"
-    :aria-label="'Promotional banners'" @mouseenter="onEnter" @mouseleave="onLeave" @focusin="onEnter"
-    @focusout="onLeave">
+    :aria-label="`${props.title}. Promotional image carousel.`" @mouseenter="onEnter" @mouseleave="onLeave"
+    @focusin="onEnter" @focusout="onLeave">
+    <CardHeader class="mb-3 sm:mb-4" content-class="!px-0 !py-0 max-w-3xl mx-auto" :badge="props.badge"
+      :title="props.title" :description="props.description" theme="light" />
     <div
       class="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-100 shadow-sm ring-1 ring-black/5">
       <div class="flex transition-transform duration-500 ease-out motion-reduce:transition-none"
@@ -115,7 +128,7 @@ function onLeave() {
         <div v-for="(slide, i) in list" :key="`${slide.image}-${i}`" class="relative w-full shrink-0"
           :aria-hidden="i !== active">
           <component :is="wrapTag(slide)" v-bind="wrapBind(slide)"
-            class="block aspect-[21/6] min-h-[140px] w-full max-sm:aspect-[4/3] sm:min-h-[160px] lg:min-h-[200px] focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50"
+            class="block aspect-[21/5] min-h-[140px] w-full max-sm:aspect-[4/3] sm:min-h-[160px] lg:min-h-[200px] focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-50"
             :aria-label="slide.link ? slide.label : undefined">
             <NuxtImg :src="slide.image" :alt="slide.label ?? 'Banner'" class="h-full w-full object-cover"
               sizes="(max-width: 768px) 100vw, 1200px" loading="lazy" format="webp" />
@@ -142,7 +155,7 @@ function onLeave() {
     </div>
 
     <p class="sr-only" aria-live="polite">
-      <template v-if="count > 1">Banner {{ active + 1 }} of {{ count }}.</template>
+      <template v-if="count > 1">Promotional banner {{ active + 1 }} of {{ count }}.</template>
     </p>
   </section>
 </template>

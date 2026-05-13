@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CardHeader from './ui/cardheader.vue'
-import ServiceOfferingCard from './ui/ServiceOfferingCard.vue'
+import ServiceOfferingCard from './ServiceOfferingCard.vue'
 
 type ServiceCard = {
     title: string
@@ -96,7 +96,7 @@ const services: ServiceCard[] = [
         },
     },
     {
-        title: 'Custom Tutor',
+        title: 'Custom Tutor Service',
         description:
             'Tell us your goals, schedule, and learning style — we match you with a mentor and plan built around your family, not a fixed package.',
         features: ['Flexible goals & timelines', 'Mixed subjects or boards', 'Dedicated academic coordinator'],

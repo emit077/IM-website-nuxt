@@ -12,6 +12,7 @@ import LearningStepsSection from '~/components/LearningStepsSection.vue'
 import BrowseMentorsSection from '~/components/BrowseMentorsSection.vue'
 import RegistrationCTASection from '~/components/RegistrationCTASection.vue'
 import PartnerProgrammeSection from '~/components/PartnerProgrammeSection.vue'
+import HeroCarousel from '~/components/HeroCarousel.vue'
 
 useSeoMeta({
   title: 'Indian Mentors — Find the Perfect Tutor for Your Child',
@@ -26,7 +27,7 @@ useSeoMeta({
 
 <template>
   <div>
-    <HeroSection />
+    <HeroCarousel />
     <BannerCarousel />
     <PartnersStrip />
     <ServiceSection />

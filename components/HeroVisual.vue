@@ -6,6 +6,16 @@ import IconStar from './IconStar.vue'
 import IconUsers from './IconUsers.vue'
 import IconHome from './IconHome.vue'
 
+withDefaults(
+  defineProps<{
+    /** Main hero photo from `public/img/hero/` */
+    imageSrc?: string
+  }>(),
+  {
+    imageSrc: '/img/hero/hero1.png',
+  },
+)
+
 // Subtle pointer-driven parallax for premium feel
 const visualRef = ref<HTMLElement | null>(null)
 const parallax = ref({ x: 0, y: 0 })
@@ -35,53 +45,27 @@ onUnmounted(() => {
   visualRef.value?.removeEventListener('pointermove', onPointerMove)
   visualRef.value?.removeEventListener('pointerleave', onPointerLeave)
 })
-
-// Use a high-quality external image (lazy, lcp candidate)
-const studentImage =
-  'https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=1200&q=85'
 </script>
 
 <template>
-  <div ref="visualRef" class="relative w-full h-full min-h-[520px] lg:min-h-[640px] flex items-center justify-center">
-    <!-- Animated mesh background blobs -->
-    <div aria-hidden="true" class="absolute inset-0 -z-10 overflow-hidden">
-      <div class="mesh-blob bg-indigo-300/50 w-[420px] h-[420px] -top-20 -right-10 animate-float-slow"></div>
-      <div class="mesh-blob bg-emerald-300/40 w-[320px] h-[320px] bottom-0 -left-10 animate-float"
+  <div ref="visualRef"
+    class="relative w-full h-full min-h-[520px] lg:min-h-[640px] flex items-center justify-center rounded-[2rem] lg:rounded-[2.25rem] bg-gradient-to-b from-transparent via-indigo-50/25 to-cream-100/50 ring-1 ring-slate-200/40">
+    <!-- Blobs tuned to cream / mesh (same family as hero section) -->
+    <div aria-hidden="true" class="absolute inset-0 -z-10 overflow-hidden rounded-[inherit]">
+      <div class="mesh-blob bg-indigo-200/35 w-[420px] h-[420px] -top-20 -right-10 animate-float-slow"></div>
+      <div class="mesh-blob bg-emerald-200/25 w-[320px] h-[320px] bottom-0 -left-10 animate-float"
         style="animation-delay: -2s"></div>
-      <div class="mesh-blob bg-amber-300/40 w-[260px] h-[260px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+      <div class="mesh-blob bg-amber-200/20 w-[260px] h-[260px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
       </div>
     </div>
 
-    <!-- Soft radial glow behind student -->
-    <div aria-hidden="true" class="absolute inset-0 -z-10 grid place-items-center">
-      <div class="w-[78%] h-[78%] rounded-full bg-indigo-200/40 blur-3xl"></div>
+    <!-- Radial wash: ties column to page cream -->
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 rounded-[inherit]"
+      style="background: radial-gradient(ellipse 85% 70% at 50% 45%, rgba(239, 246, 255, 0.55) 0%, rgba(252, 252, 250, 0.35) 45%, transparent 72%);">
     </div>
+    <NuxtImg :src="imageSrc" alt="Student learning with Indian Mentors — personalised tutoring in India" class="  "
+      width="100%" height="1125" format="webp" loading="eager" fetchpriority="high" placeholder />
 
-    <!-- Main image card with parallax -->
-    <div class="relative aspect-[4/5] w-[88%] max-w-[460px] sm:max-w-[500px]" :style="{
-      transform: `translate3d(${parallax.x}px, ${parallax.y}px, 0)`,
-      transition: 'transform 220ms cubic-bezier(0.22, 1, 0.36, 1)',
-    }" v-motion :initial="{ opacity: 0, scale: 0.94, y: 30 }" :enter="{
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        transition: { duration: 900, delay: 200, ease: [0.22, 1, 0.36, 1] },
-      }">
-      <!-- Decorative gradient ring -->
-      <div aria-hidden="true"
-        class="absolute -inset-3 rounded-[2.2rem] bg-gradient-to-br from-indigo-400/30 via-emerald-300/20 to-amber-300/30 blur-2xl">
-      </div>
-
-      <div class="relative w-full h-full rounded-[2rem] overflow-hidden shadow-card border border-white/60 bg-white">
-        <NuxtImg :src="studentImage" alt="Smiling Indian student holding textbooks, ready to learn with Indian Mentors"
-          class="w-full h-full object-cover" width="900" height="1125" format="webp" loading="eager"
-          fetchpriority="high" placeholder sizes="(max-width: 640px) 88vw, (max-width: 1024px) 45vw, 480px" />
-
-        <!-- Subtle gradient overlay for depth -->
-        <div aria-hidden="true"
-          class="absolute inset-0 bg-gradient-to-t from-indigo-900/15 via-transparent to-transparent"></div>
-      </div>
-    </div>
 
     <!-- Floating Card: Verified Tutor (top-left) -->
     <FloatingCard variant="success" :delay="600" float="normal" :initial-x="-20" :initial-y="-10"
@@ -131,3 +115,25 @@ const studentImage =
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Bottom fade: subject dissolves into page cream (see partner hero reference) */
+.hero-visual-photo {
+  -webkit-mask-image: linear-gradient(to bottom,
+      #000 0%,
+      #000 42%,
+      rgba(0, 0, 0, 0.98) 58%,
+      rgba(0, 0, 0, 0.45) 78%,
+      transparent 100%);
+  mask-image: linear-gradient(to bottom,
+      #000 0%,
+      #000 42%,
+      rgba(0, 0, 0, 0.98) 58%,
+      rgba(0, 0, 0, 0.45) 78%,
+      transparent 100%);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+</style>
